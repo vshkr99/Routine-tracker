@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routine Tracker</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUm91dGluZSBUcmFja2VyIiwic2hvcnRfbmFtZSI6IlJvdXRpbmVzIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxZjI5MzciLCJ0aGVtZV9jb2xvciI6IiM0Zjc5YTQifQ==">
+    <meta name="theme-color" content="#4f79a4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%234f79a4'/><text x='50' y='55' font-size='40' text-anchor='middle' fill='white'>📅</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📅 Routine Tracker</h1>
+            <p class="subtitle">Stay accountable to your goals</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+            <button class="nav-btn" data-section="add-routine">Add Routine</button>
+            <button class="nav-btn" data-section="stats">Stats</button>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section active">
+            <div class="today-header">
+                <h2>Today's Routines</h2>
+                <div class="date-display" id="currentDate"></div>
+            </div>
+
+            <!-- Today's Routines -->
+            <div id="todayRoutines" class="routines-container">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+
+            <!-- Upcoming Notifications -->
+            <div class="upcoming-section">
+                <h3>Upcoming (Next 2 Hours)</h3>
+                <div id="upcomingRoutines" class="upcoming-container">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button id="enableNotifications" class="action-btn">🔔 Enable Notifications</button>
+                <button id="testNotification" class="action-btn secondary">🧪 Test Notification</button>
+            </div>
+        </div>
+
+        <!-- Add Routine Section -->
+        <div id="add-routine" class="section">
+            <div class="routine-form">
+                <h2>Add New Routine</h2>
+                
+                <div class="form-group">
+                    <label for="routineName">Routine Name</label>
+                    <input type="text" id="routineName" placeholder="e.g., Morning Workout" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="routineDescription">Description (Optional)</label>
+                    <input type="text" id="routineDescription" placeholder="Brief description">
+                </div>
+
+                <div class="form-group">
+                    <label for="routineFrequency">Frequency</label>
+                    <select id="routineFrequency" required>
+                        <option value="">Select frequency</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                        <option value="infinite">Infinite (No end date)</option>
+                    </select>
+                </div>
+
+                <!-- Daily Options -->
+                <div id="dailyOptions" class="frequency-options" style="display: none;">
+                    <div class="form-group">
+                        <label for="dailyTime">Time</label>
+                        <input type="time" id="dailyTime" required>
+                    </div>
+                </div>
+
+                <!-- Weekly Options -->
+                <div id="weeklyOptions" class="frequency-options" style="display: none;">
+                    <div class="form-group">
+                        <label>Days of Week</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="1"> Monday
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="2"> Tuesday
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="3"> Wednesday
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="4"> Thursday
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="5"> Friday
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="6"> Saturday
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="0"> Sunday
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="weeklyTime">Time</label>
+                        <input type="time" id="weeklyTime" required>
+                    </div>
+                </div>
+
+                <!-- Monthly Options -->
+                <div id="monthlyOptions" class="frequency-options" style="display: none;">
+                    <div class="form-group">
+                        <label for="monthlyDate">Day of Month</label>
+                        <input type="number" id="monthlyDate" min="1" max="31" placeholder="e.g., 15" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="monthlyTime">Time</label>
+                        <input type="time" id="monthlyTime" required>
+                    </div>
+                </div>
+
+                <!-- Yearly Options -->
+                <div id="yearlyOptions" class="frequency-options" style="display: none;">
+                    <div class="form-group">
+                        <label for="yearlyMonth">Month</label>
+                        <select id="yearlyMonth" required>
+                            <option value="">Select month</option>
+                            <option value="0">January</option>
+                            <option value="1">February</option>
+                            <option value="2">March</option>
+                            <option value="3">April</option>
+                            <option value="4">May</option>
+                            <option value="5">June</option>
+                            <option value="6">July</option>
+                            <option value="7">August</option>
+                            <option value="8">September</option>
+                            <option value="9">October</option>
+                            <option value="10">November</option>
+                            <option value="11">December</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="yearlyDate">Day</label>
+                        <input type="number" id="yearlyDate" min="1" max="31" placeholder="e.g., 25" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="yearlyTime">Time</label>
+                        <input type="time" id="yearlyTime" required>
+                    </div>
+                </div>
+
+                <!-- Infinite Options -->
+                <div id="infiniteOptions" class="frequency-options" style="display: none;">
+                    <div class="form-group">
+                        <label for="infiniteStartDate">Start Date</label>
+                        <input type="date" id="infiniteStartDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="infiniteTime">Time</label>
+                        <input type="time" id="infiniteTime" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="saveRoutine" class="btn-primary">Save Routine</button>
+                    <button type="button" id="clearForm" class="btn-secondary">Clear Form</button>
+                </div>
+            </div>
+
+            <!-- Existing Routines -->
+            <div class="existing-routines">
+                <h3>Your Routines</h3>
+                <div id="routinesList" class="routines-list">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div id="stats" class="section">
+            <div class="stats-header">
+                <h2>📊 Statistics</h2>
+            </div>
+
+            <!-- Overall Stats -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalRoutines">0</div>
+                    <div class="stat-label">Total Routines</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="overallCompletion">0%</div>
+                    <div class="stat-label">Overall Completion</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="currentStreak">0</div>
+                    <div class="stat-label">Current Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCompleted">0</div>
+                    <div class="stat-label">Total Completed</div>
+                </div>
+            </div>
+
+            <!-- Period Filter -->
+            <div class="period-filter">
+                <button class="period-btn active" data-period="week">This Week</button>
+                <button class="period-btn" data-period="month">This Month</button>
+                <button class="period-btn" data-period="year">This Year</button>
+                <button class="period-btn" data-period="all">All Time</button>
+            </div>
+
+            <!-- Detailed Stats -->
+            <div id="detailedStats" class="detailed-stats">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+
+            <!-- Progress Charts -->
+            <div class="charts-section">
+                <h3>Progress Over Time</h3>
+                <div id="progressChart" class="chart-container">
+                    <!-- Simple progress visualization will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Export Data -->
+            <div class="data-actions">
+                <button id="exportData" class="btn-secondary">📤 Export Data</button>
+                <button id="clearAllData" class="btn-danger">🗑️ Clear All Data</button>
+            </div>
+        </div>
+
+        <!-- Notification Permission Modal -->
+        <div id="notificationModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Enable Notifications</h3>
+                <p>Get reminded 10 minutes before each routine to stay on track!</p>
+                <div class="modal-actions">
+                    <button id="allowNotifications" class="btn-primary">Allow Notifications</button>
+                    <button id="denyNotifications" class="btn-secondary">Maybe Later</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Routine Action Modal -->
+        <div id="routineModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3 id="routineModalTitle">Mark Routine</h3>
+                <p id="routineModalDescription">How did this routine go?</p>
+                <div class="modal-actions">
+                    <button id="markComplete" class="btn-success">✅ Completed</button>
+                    <button id="markFailed" class="btn-danger">❌ Failed</button>
+                    <button id="markSkip" class="btn-secondary">⏭️ Skip</button>
+                    <button id="closeModal" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
